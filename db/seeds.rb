@@ -1,24 +1,25 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
 require 'httparty'
 require 'json'
 
+Comment.destroy_all
 Story.destroy_all
 
 puts "Calling HackerNews API...\n"
 url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
 
-def fetch_comments_by_id(story_id, post_kids)
-  loop do
-  break if !post_kids
-  end
-  post['kids'].each do |k|
-    
+def fetch_comments_by_story_id(story_id, parent_id, _parent_kids)
+  puts 'inside fetch comments'
+  puts "story id: #{story_id}, parent id: #{parent_id}, len of kids: #{_parent_kids.length}"
+  _parent_kids.each do |k|
+    url = "https://hacker-news.firebaseio.com/v0/item/#{k}.json?print=pretty"
+    fetched_data = HTTParty.get(url).parsed_response
+    # puts "story_id #{story_id.to_i}, parent_id: #{parent_id}, kids: #{fetched_data['kids']}"
+    @comment = Comment.new(story_id: story_id.to_i, parent_id: parent_id, text: fetched_data['text'])
+    @comment.save
+
+    next unless fetched_data['kids'] && fetched_data['kids'].length > 0
+
+    fetch_comments_by_story_id(story_id.to_i, @comment.id, fetched_data['kids'])
   end
 end
 
@@ -40,5 +41,5 @@ top_10_posts.each do |post_id|
   @story = Story.new(by: post['by'], total_comment_count: post['descendants'].to_i, hn_story_id: post['id'], score: post['score'].to_i, time: post['time'], title: post['title'], url: post['url'])
   @story.save
 
-  fetch_comments_by_story_id(@story.id, post['kids']) if post['kids'] && post['kids'].length > 0
+  fetch_comments_by_story_id(@story.id, nil, post['kids']) if post['kids'] && post['kids'].length > 0
 end
