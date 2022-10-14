@@ -3,4 +3,8 @@
 <h5>score: <%= @story.score %> </h5>
 <h5>time: <%= @story.time %></h5>
 <p><a href="<%= @story.url %>">click here to read...</a></p>
+<p>
+  <strong>Comments:</strong>
+  <%= render @story.comments.where(parent_id: nil) %>
+</p>
   
