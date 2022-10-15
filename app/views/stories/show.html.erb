@@ -5,6 +5,6 @@
 <p><a href="<%= @story.url %>">click here to read...</a></p>
 <p>
   <strong>Comments:</strong>
-  <%= render @story.comments.where(parent_id: nil) %>
+  <%= render @story.comments.includes(:comments).where(parent_id: nil) %>
 </p>
   
