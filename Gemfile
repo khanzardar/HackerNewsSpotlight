@@ -74,3 +74,5 @@ group :test do
 end
 
 gem "httparty", "~> 0.20.0"
+
+gem "resque", "~> 2.4"
