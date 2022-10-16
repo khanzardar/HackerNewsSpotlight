@@ -8,7 +8,7 @@ def fetch_comments_by_story_id(story_id, parent_id, _parent_kids)
     url = "https://hacker-news.firebaseio.com/v0/item/#{k}.json?print=pretty"
     fetched_data = HTTParty.get(url).parsed_response
     # puts "story_id #{story_id.to_i}, parent_id: #{parent_id}, kids: #{fetched_data['kids']}"
-    @comment = Comment.new(story_id: story_id.to_i, parent_id: parent_id, text: fetched_data['text'])
+    @comment = Comment.new(story_id: story_id.to_i, parent_id: parent_id, text: fetched_data['text'], by: fetched_data['by'], time: fetched_data['time'])
     @comment.save
 
     next unless fetched_data['kids'] && fetched_data['kids'].length > 0

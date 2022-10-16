@@ -1,4 +1,5 @@
 <article>
+  <small><%= comment.by %> (<%= Time.at(comment.time.to_i) %>)</small>
   <p><%= comment.text %></p>
   <div class="sub-comment">
     <%= render comment.comments %>

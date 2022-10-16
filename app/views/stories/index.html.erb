@@ -5,6 +5,7 @@
       <a href="/stories/<%=story.id%>">
       <%= story.title %>
       </a>
+      <small>[<%= story.total_comment_count %> comments, <%= story.score%> points]</small>
     </li>
   <% end %>
 </ul>
