@@ -1,9 +1,6 @@
 require 'httparty'
 require 'json'
 
-Comment.destroy_all
-Story.destroy_all
-
 def fetch_comments_by_story_id(story_id, parent_id, _parent_kids)
   puts 'inside fetch comments'
   puts "story id: #{story_id}, parent id: #{parent_id}, len of kids: #{_parent_kids.length}"
@@ -44,5 +41,13 @@ def fetch_top10_hackernews_stories
   end
 end
 
-puts "Calling HackerNews API...\n"
-fetch_top10_hackernews_stories
+Comment.destroy_all
+Story.destroy_all
+
+begin
+  puts "\nCalling HackerNews API...\n"
+  fetch_top10_hackernews_stories
+  puts '\nFinished fetching data from HackerNews\n'
+rescue Exception => e
+  puts "Failed: fetching HackerNews data: #{e}"
+end

@@ -1,7 +1,7 @@
 <h1><%= @story.title %></h1>
 <h4>total comment count: <%= @story.total_comment_count %></h4>
 <h5>score: <%= @story.score %> </h5>
-<h5>time: <%= @story.time %></h5>
+<h5>time: <%= Time.at(@story.time.to_i) %></h5>
 <p><a href="<%= @story.url %>">click here to read...</a></p>
 <p>
   <strong>Comments:</strong>
